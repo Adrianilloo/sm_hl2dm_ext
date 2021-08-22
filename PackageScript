@@ -1,0 +1,23 @@
+# vim: set ts=8 sts=2 sw=2 tw=99 et ft=python:
+import os
+
+builder.SetBuildFolder('package')
+
+folder_list = [
+	'addons/sourcemod/extensions',
+	'addons/sourcemod/translations'
+]
+
+# Create the distribution folder hierarchy
+folder_map = {}
+
+for folder in folder_list:
+	norm_folder = os.path.normpath(folder)
+	folder_map[folder] = builder.AddFolder(norm_folder)
+
+# Translations
+builder.AddCopy(os.path.join('translations', 'hl2dm.ext.phrases.txt'), folder_map['addons/sourcemod/translations'])
+
+# Copy binaries
+for cxx_task in Extension.extensions:
+	builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])

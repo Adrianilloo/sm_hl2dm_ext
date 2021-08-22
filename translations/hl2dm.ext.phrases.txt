@@ -1,0 +1,20 @@
+"Phrases"
+{
+	"PluginMessagesOff_Connect"
+	{
+		"en" "It looks as if you have plugin messages disabled. These are special dialogs that server sends and which display on the game menu screen"
+		"es" "Parece que tienes los mensajes de complementos desactivados. Éstos son diálogos especiales que el servidor envía y se muestran en la pantalla del menú del juego"
+	}
+
+	"PluginMessageFailed"
+	{
+		"en" "The server sent you a custom dialog, but it couldn't be displayed as you need to allow plugin messages first"
+		"es" "El servidor te envió un diálogo personalizado, pero no se pudo mostrar ya que debes permitir los mensajes de complementos primero"
+	}
+
+	"PluginMessages_ConsoleHint"
+	{
+		"en" "Enable them by typing in console"
+		"es" "Actívalos escribiendo en tu consola"
+	}
+}
