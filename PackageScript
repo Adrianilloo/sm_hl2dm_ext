@@ -3,21 +3,32 @@ import os
 
 builder.SetBuildFolder('package')
 
+smPath = 'addons/sourcemod/'
+
 folder_list = [
-	'addons/sourcemod/extensions',
-	'addons/sourcemod/translations'
+	'translations'
 ]
+
+arch_subdirs = {
+	'x86_64': 'x64'
+}
+
+for cxx_task in Extension.extensions:
+	folder_list += ['extensions/' + arch_subdirs.get(cxx_task.target.arch, '')]
 
 # Create the distribution folder hierarchy
 folder_map = {}
 
 for folder in folder_list:
-	norm_folder = os.path.normpath(folder)
+	norm_folder = os.path.normpath(os.path.join(smPath, folder))
 	folder_map[folder] = builder.AddFolder(norm_folder)
 
 # Translations
-builder.AddCopy(os.path.join('translations', 'hl2dm.ext.phrases.txt'), folder_map['addons/sourcemod/translations'])
+builder.AddCopy(os.path.join('translations', 'hl2dm.ext.phrases.txt'), folder_map['translations'])
 
 # Copy binaries
 for cxx_task in Extension.extensions:
-	builder.AddCopy(cxx_task.binary, folder_map['addons/sourcemod/extensions'])
+	builder.AddCopy(cxx_task.binary, folder_map['extensions/' + arch_subdirs.get(cxx_task.target.arch, '')])
+
+# Copy special .autoload file (only required under extensions root dir)
+builder.AddCopy('hl2dm.autoload', folder_map['extensions/'])

@@ -1,7 +1,6 @@
 #include "bitflags.h"
 #include "generic.h"
 #include <igameevents.h>
-#include <ISDKTools.h>
 #include <smsdk_ext.h>
 
 using namespace SourceMod;
@@ -48,7 +47,6 @@ static IPhraseCollection* spPhrases;
 static IServerPluginHelpers* spPluginHelpers;
 static IPluginHelpersCheck* spPluginHelpersCheck;
 static IGameEventManager2* spEventManager;
-static ISDKTools* spSDKTools;
 static int sMessageCreateHookId, sCVarQueryFinishedHookId;
 static SPlayerData sPlayersData[SM_MAXPLAYERS + 1];
 static ConVar sPluginMsgsHelpModeCVar("sm_pluginmessages_help_mode", "2", 0, "Activation mode of plugin messages"
@@ -198,7 +196,6 @@ bool CHL2MPExtension::SDK_OnMetamodLoad(ISmmAPI* ismm, char* error, size_t maxle
 
 void CHL2MPExtension::SDK_OnAllLoaded()
 {
-	SM_GET_LATE_IFACE(SDKTOOLS, spSDKTools);
 	ConVar_Register(0, this);
 	OnPluginMsgsHelpModeChanged(&sPluginMsgsJoinDelayCVar, "", EPluginMessagesHelpMode::Disabled);
 	spPhrases = translator->CreatePhraseCollection();
@@ -262,7 +259,7 @@ void CHL2MPExtension::OnClientPostAdminCheck(int client)
 
 ResultType CHL2MPExtension::OnTimer(ITimer*, void* userId)
 {
-	int client = playerhelpers->GetClientOfUserId((int)userId);
+	int client = playerhelpers->GetClientOfUserId((size_t)userId);
 
 	if (client > 0)
 	{
@@ -276,18 +273,6 @@ ResultType CHL2MPExtension::OnTimer(ITimer*, void* userId)
 void CHL2MPExtension::FireGameEvent(IGameEvent*)
 {
 	// Fix up unsynced SM cached timeleft upon 'round_start' events
-	float gameStartTime = spMetamod->GetCGlobals()->curtime;
-
-	if (spSDKTools != NULL && spSDKTools->GetGameRules() != NULL)
-	{
-		sm_sendprop_info_t* pGameStartTimeInfo = NULL;
-
-		if (gamehelpers->FindSendPropInfo("CHL2MPGameRulesProxy", "m_flGameStartTime", pGameStartTimeInfo))
-		{
-			gameStartTime = *(float*)((uint)spSDKTools->GetGameRules() + pGameStartTimeInfo->actual_offset);
-		}
-	}
-
 	timersys->NotifyOfGameStart();
 	timersys->MapTimeLeftChanged();
 }
