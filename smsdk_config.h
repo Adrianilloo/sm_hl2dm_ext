@@ -39,7 +39,7 @@
 /* Basic information exposed publicly */
 #define SMEXT_CONF_NAME        "Half-Life 2: Deathmatch"
 #define SMEXT_CONF_DESCRIPTION "SourceMod extension with corrections and enhancements for/under HL2:DM"
-#define SMEXT_CONF_VERSION     "1.0"
+#define SMEXT_CONF_VERSION     "1.1"
 #define SMEXT_CONF_AUTHOR      "AdRiAnIlloO"
 #define SMEXT_CONF_URL         "https://github.com/Adrianilloo/sm_ext_hl2dm"
 #define SMEXT_CONF_LOGTAG      "HL2:DM Ext"
